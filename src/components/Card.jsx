@@ -3,32 +3,30 @@ import Img from "gatsby-image"
 import { Link } from "gatsby-plugin-modal-routing"
 import PropTypes from "prop-types"
 import React from "react"
-import { Feature } from "."
 
 export const Card = props => {
   const {
-    country,
     image: {
       localFiles: [cover],
     },
-    name,
+    title,
     navigation,
     slug,
-    summary,
+    rating,
+    year,
   } = props
 
   return (
     <div className="bg-white h-full shadow-sm rounded-md overflow-hidden hover:bg-blue-100">
       <Link to={`/${slug}`} state={{ navigation }} asModal>
         <div className="bg-blue-300">
-          <Img fluid={cover.childImageSharp.fluid} alt={name} />
+          <Img fluid={cover.childImageSharp.fluid} alt={title} />
         </div>
         <div className="p-5 pb-1">
           <h1 className="text-2xl text-blue-500 font-bold leading-snug">
-            {name}
+            {title} [{year}年]
           </h1>
-          <p className="text-base text-blue-900 mb-5 font-medium">{summary}</p>
-          <Feature label="Country" value={country} />
+          <p className="text-base text-blue-900 mb-5 font-medium">評価 {rating}点</p>
         </div>
       </Link>
     </div>
@@ -36,17 +34,17 @@ export const Card = props => {
 }
 
 Card.propTypes = {
-  country: PropTypes.string.isRequired,
   image: PropTypes.shape({
     localFiles: PropTypes.array,
   }).isRequired,
-  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   navigation: PropTypes.shape({
     current: PropTypes.number,
     items: PropTypes.arrayOf(PropTypes.string),
   }),
   slug: PropTypes.string.isRequired,
-  summary: PropTypes.string.isRequired,
+  rating: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
 }
 
 Card.defaultProps = {

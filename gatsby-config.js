@@ -3,13 +3,12 @@ require("dotenv").config()
 module.exports = {
   siteMetadata: {
     links: {
-      contact: "mailto:contact@me.com",
-      facebook: "https://www.facebook.com",
-      linkedin: "https://www.linkedin.com",
-      twitter: "https://www.twitter.com",
+      twitter: "https://twitter.com/pitang1965",
+      instagram: "https://www.instagram.com/pitang1965/",
+      contact: "mailto:pitang1965@gmail.com",
     },
-    locale: "en",
-    title: "Travel destinations",
+    locale: "ja",
+    title: "お気に入りの映画",
   },
   plugins: [
     {
@@ -62,8 +61,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Travel Destinations`,
-        short_name: `Travel Destinations`,
+        name: `私のお気に入り映画`,
+        short_name: `ピータン映画`,
         start_url: `/`,
         background_color: `#fff`,
         theme_color: `#4299e1`,

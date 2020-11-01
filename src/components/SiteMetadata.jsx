@@ -34,7 +34,7 @@ export const SiteMetadata = ({ description, image, title }) => {
       <meta property="og:site_name" content={siteTitle} />
       <meta property="og:image" content={image} />
       <meta property="og:description" content={description} />
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="ピータンの好きな映画を紹介します。" />
       <meta name="twitter:image" content={image} />
       <meta property="twitter:description" content={description} />
     </Helmet>

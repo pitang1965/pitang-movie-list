@@ -7,16 +7,16 @@ export default ({ data }) => {
   return (
     <Layout>
       <SiteMetadata
-        title="Travel destinations"
-        description="Check the most popular travel destinations in Europe."
+        title="ピータン映画"
+        description="私のお気に入りの映画(10点満点中8点以上）です。"
         image={data.hero.url}
       />
 
       <Hero
         image={data.hero}
-        tag="#travel"
-        title="Travel destinations"
-        description="Check the most popular travel locations in Europe."
+        tag="#movie"
+        title="ピータンのお気に入りの映画"
+        description="私のお気に入りの映画(10点満点中8点以上）です。"
       />
 
       <Cards nodes={data.items.nodes} />
@@ -26,19 +26,19 @@ export default ({ data }) => {
 
 export const query = graphql`
   query IndexQuery($tableName: String!) {
-    hero: file(relativePath: { eq: "hero-travel.jpg" }) {
+    hero: file(relativePath: { eq: "hero-movie.jpg" }) {
       ...HeroImageFragment
     }
     items: allAirtable(filter: { table: { eq: $tableName } }) {
       nodes {
         data {
-          country
           image {
             ...CardImageFragment
           }
-          name
+          title
           slug
-          summary
+          rating
+          year
         }
       }
     }

@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import React from "react"
 
 export const Hero = props => {
-  const { description, image, tag, title } = props
+  const { review, image, tag, title } = props
 
   return (
     <div className="container mt-12">
@@ -35,7 +35,7 @@ export const Hero = props => {
           <h1 className="text-2xl lg:text-4xl font-bold leading-tight">
             {title}
           </h1>
-          <h3 className="text-lg font-medium md:w-2/3">{description}</h3>
+          <h3 className="text-lg font-medium md:w-2/3">{review}</h3>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@ export const Hero = props => {
 }
 
 Hero.propTypes = {
-  description: PropTypes.string.isRequired,
+  review: PropTypes.string.isRequired,
   image: PropTypes.shape({
     url: PropTypes.string.isRequired,
     childImageSharp: PropTypes.shape({
@@ -62,7 +62,7 @@ export const query = graphql`
       mobile: fixed(width: 768, height: 240, quality: 80, cropFocus: CENTER) {
         ...GatsbyImageSharpFixed_withWebp
       }
-      desktop: fixed(width: 1248, height: 280, quality: 85, cropFocus: SOUTH) {
+      desktop: fixed(width: 1248, height: 280, quality: 85, cropFocus: CENTER) {
         ...GatsbyImageSharpFixed_withWebp
       }
     }

@@ -38,14 +38,15 @@ Once you have it, go to [this base](https://airtable.com/shrlYuICEwEdAUir3) and 
 
 Included columns:
 
-- `name` (single line text)
+- `title` (single line text)
 - `slug` (single line text, should be unique)
-- `summary` (single line text)
+- `rating` (single line text)
 - `image` (attachment)
 - `descrition` (long text)
-- `country` (single select)
+- `countries` (single select)
 - `tags` (multiple select)
 - `url` (single line text)
+- `year` (single line text)
 
 ### Set up Airtable API keys
 
