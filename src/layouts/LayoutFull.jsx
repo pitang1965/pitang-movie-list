@@ -8,7 +8,7 @@ export const LayoutFull = ({ children }) => {
       <header className="bg-white py-6">
         <div className="container text-center">
           <Link to="/" className="inline-block">
-            <img alt="幼少期のピータンと父" src="/baby-pitang.jpg" />
+            <img alt="幼少期のピータンと父" src="./baby-pitang.jpg" />
           </Link>
         </div>
       </header>

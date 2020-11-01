@@ -1,10 +1,13 @@
 # Airtable listing theme for Gatsby
 
-### Gatsby starter theme integrated with [Airtable](https://airtable.com/)
+### [Airtable](https://airtable.com/)に統合されたGatsbyスターター [gatsby-airtable-listing](https://www.gatsbyjs.com/starters/wkocjan/gatsby-airtable-listing)を使用した私の好きな映画リスト
+[Over 40 Web Club](https://over40webclub.netlify.app/)の
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8f5d678c-4883-4f56-9af6-9234c2474a4e/deploy-status)](https://app.netlify.com/sites/pitang-movie-list/deploys)
 
 ## Demo
+https://pitang-movie-list.netlify.app/
 
-Live demo is available at: https://gatsby-airtable-listing.netlify.com/
 
 ## Screenshot
 
