@@ -40,7 +40,6 @@ export default props => {
             <div className="w-full lg:w-2/5 lg:pl-4">
               <Feature label="国" value={countries} />
               <Feature label="タグ" value={tags} />
-              <Img FaYoutube/>
               <Feature label="動画URL" value={url} />
               <Feature label="公開年" value={year} />
               <p className="mt-4 whitespace-pre-line text-sm lg:text-base leading-normal text-blue-900">
