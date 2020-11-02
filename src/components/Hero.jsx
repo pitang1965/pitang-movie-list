@@ -43,7 +43,7 @@ export const Hero = props => {
 }
 
 Hero.propTypes = {
-  review: PropTypes.string.isRequired,
+  review: PropTypes.string,
   image: PropTypes.shape({
     url: PropTypes.string.isRequired,
     childImageSharp: PropTypes.shape({
@@ -51,7 +51,7 @@ Hero.propTypes = {
       mobile: PropTypes.object.isRequired,
     }).isRequired,
   }).isRequired,
-  tag: PropTypes.string.isRequired,
+  tag: PropTypes.string,
   title: PropTypes.string.isRequired,
 }
 
