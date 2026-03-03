@@ -13,7 +13,7 @@ export interface Movie {
 export async function getMovies(): Promise<Movie[]> {
   const baseId = import.meta.env.AIRTABLE_BASE_ID
   const tableName = import.meta.env.AIRTABLE_TABLE_NAME
-  const token = import.meta.env.AIRTABLE_API_TOKEN
+  const token = import.meta.env.AIRTABLE_API_KEY
 
   const res = await fetch(
     `https://api.airtable.com/v0/${baseId}/${tableName}`,
