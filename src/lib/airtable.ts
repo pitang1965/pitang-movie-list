@@ -20,5 +20,8 @@ export async function getMovies(): Promise<Movie[]> {
     { headers: { Authorization: `Bearer ${token}` } }
   )
   const data = await res.json()
+  if (!res.ok || !data.records) {
+    throw new Error(`Airtable API error (${res.status}): ${JSON.stringify(data)}`)
+  }
   return data.records.map((r: { fields: Movie }) => r.fields)
 }
