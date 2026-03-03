@@ -1,0 +1,73 @@
+---
+import { getMovies } from "../lib/airtable";
+import Layout from "../layouts/Layout.astro";
+import Feature from "../components/Feature.astro";
+
+export async function getStaticPaths() {
+  const movies = await getMovies();
+  return movies.map((movie) => ({
+    params: { slug: movie.slug },
+    props: { movie },
+  }));
+}
+
+const { movie } = Astro.props;
+const { title, rating, countries, tags, url, year, review, image, slug } =
+  movie;
+const coverUrl = image?.[0]?.url ?? "";
+---
+
+<Layout title={title} description={`評価 ${rating}点`} image={coverUrl}>
+  <div class="min-h-screen bg-black/70 flex items-start justify-center py-8 px-4">
+    <div class="relative w-full max-w-3xl bg-white shadow-lg rounded-md overflow-hidden">
+      <!-- 閉じるボタン -->
+      <a
+        href="/"
+        class="absolute top-3 right-3 z-10 flex items-center gap-1 bg-black/50 hover:bg-black/70 text-white text-sm font-medium px-3 py-1.5 rounded-full transition-colors duration-200"
+        aria-label="一覧に戻る"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+          ></path>
+        </svg>
+        一覧に戻る
+      </a>
+
+      <article>
+        <div class="p-4 lg:p-8">
+          <h1 class="text-2xl lg:text-3xl text-blue-500 font-bold leading-tight">
+            {title}
+          </h1>
+          <p class="text-base lg:text-lg text-blue-800 font-medium mb-4">
+            評価 {rating}点
+          </p>
+          <div class="flex flex-wrap">
+            <div class="w-full pb-4 lg:w-3/5 lg:pr-4 lg:pb-0">
+              <img
+                src={coverUrl}
+                alt={title}
+                class="w-full object-cover rounded"
+                style="aspect-ratio: 733/480;"
+                transition:name={`cover-${slug}`}
+              />
+            </div>
+            <div class="w-full lg:w-2/5 lg:pl-4">
+              <Feature label="国" value={countries} />
+              <Feature label="タグ" value={tags} />
+              <Feature label="動画URL" value={url} />
+              <Feature label="公開年" value={year} />
+              {
+                review && (
+                  <p class="mt-4 whitespace-pre-line text-sm lg:text-base leading-normal text-blue-900">
+                    {review}
+                  </p>
+                )
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</Layout>

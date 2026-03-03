@@ -1,0 +1,40 @@
+---
+interface Props {
+  label: string;
+  value: string | string[] | undefined;
+}
+
+const { label, value } = Astro.props;
+---
+
+{
+  value !== undefined && value !== null && (
+    <>
+      <h4 class="text-blue-800 uppercase text-xxs tracking-wide font-medium pb-px">
+        {label}
+      </h4>
+      <div class="font-medium text-blue-800 text-base leading-loose mb-4">
+        {typeof value === "string" ? (
+          value.startsWith("http") || value.startsWith("mailto") ? (
+            <div class="truncate">
+              <a
+                href={value}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-blue-500 hover:text-blue-700 transition-colors duration-200"
+              >
+                {value}
+              </a>
+            </div>
+          ) : (
+            <div class="truncate">{value}</div>
+          )
+        ) : Array.isArray(value) ? (
+          value.map((item) => (
+            <span class="inline-block mr-4 break-normal">{item}</span>
+          ))
+        ) : null}
+      </div>
+    </>
+  )
+}

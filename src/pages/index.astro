@@ -1,0 +1,20 @@
+---
+import { getMovies } from "../lib/airtable";
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Cards from "../components/Cards.astro";
+
+const movies = await getMovies();
+---
+
+<Layout
+  title="ピータン映画"
+  description="私のお気に入りの映画(10点満点中8点以上）です。"
+>
+  <Hero
+    tag="#movie"
+    title="ピータンのお気に入りの映画"
+    description="私のお気に入りの映画(10点満点中8点以上）です。"
+  />
+  <Cards movies={movies} />
+</Layout>

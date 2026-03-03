@@ -1,0 +1,31 @@
+---
+import type { Movie } from "../lib/airtable";
+
+interface Props {
+  movie: Movie;
+}
+
+const { movie } = Astro.props;
+const { title, slug, rating, year, image } = movie;
+const coverUrl = image?.[0]?.url ?? "";
+---
+
+<div class="bg-white h-full shadow-sm rounded-md overflow-hidden hover:bg-blue-100">
+  <a href={`/${slug}`}>
+    <div class="bg-blue-300">
+      <img
+        src={coverUrl}
+        alt={title}
+        class="w-full object-cover"
+        style="aspect-ratio: 640/420;"
+        transition:name={`cover-${slug}`}
+      />
+    </div>
+    <div class="p-5 pb-1">
+      <h2 class="text-2xl text-blue-500 font-bold leading-snug">
+        {title} [{year}年]
+      </h2>
+      <p class="text-base text-blue-900 mb-5 font-medium">評価 {rating}点</p>
+    </div>
+  </a>
+</div>
