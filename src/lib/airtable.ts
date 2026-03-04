@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 
 export interface Movie {
@@ -27,33 +26,13 @@ export async function getMovies(): Promise<Movie[]> {
     throw new Error(`Airtable API error (${res.status}): ${JSON.stringify(data)}`)
   }
 
-  const movies: Movie[] = data.records.map((r: { fields: Movie }) => r.fields)
-
-  // ビルド時に画像をローカルにダウンロードして期限切れURLを回避
-  const imagesDir = path.join(process.cwd(), 'public', 'images', 'movies')
-  fs.mkdirSync(imagesDir, { recursive: true })
-
-  await Promise.all(
-    movies.map(async (movie) => {
-      if (!movie.image?.[0]) return
-      const { url, filename } = movie.image[0]
-      const ext = path.extname(filename) || '.jpg'
-      const localFilename = `${movie.slug}${ext}`
-      const localPath = path.join(imagesDir, localFilename)
-
-      if (!fs.existsSync(localPath)) {
-        try {
-          const imgRes = await fetch(url)
-          const buffer = await imgRes.arrayBuffer()
-          fs.writeFileSync(localPath, Buffer.from(buffer))
-        } catch (e) {
-          console.warn(`画像のダウンロードに失敗: ${movie.slug}`, e)
-        }
-      }
-
-      movie.image[0].url = `/images/movies/${localFilename}`
-    })
-  )
-
-  return movies
+  return data.records.map((r: { fields: Movie }) => {
+    const movie = r.fields
+    // ビルド前スクリプトでダウンロード済みのローカルパスを使用
+    if (movie.image?.[0]) {
+      const ext = path.extname(movie.image[0].filename) || '.jpg'
+      movie.image[0].url = `/images/movies/${movie.slug}${ext}`
+    }
+    return movie
+  })
 }
