@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import path from 'node:path'
 
 export interface Movie {
@@ -28,11 +29,11 @@ export async function getMovies(): Promise<Movie[]> {
 
   return data.records.map((r: { fields: Movie }) => {
     const movie = r.fields
-    // ビルド前スクリプトでダウンロード済みのローカルパスを使用
-    if (movie.image?.[0]) {
-      const ext = path.extname(movie.image[0].filename) || '.jpg'
-      movie.image[0].url = `/images/movies/${movie.slug}${ext}`
-    }
+    // ビルド前スクリプトで TMDb からダウンロード済みのローカル画像を使用
+    const file = `/images/movies/${movie.slug}.jpg`
+    movie.image = fs.existsSync(path.join(process.cwd(), 'public', file))
+      ? [{ url: file, filename: `${movie.slug}.jpg` }]
+      : []
     return movie
   })
 }
