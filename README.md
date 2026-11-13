@@ -1,43 +1,39 @@
-# Astro Starter Kit: Minimal
+# pitang-movie-list
+
+Airtable に登録した映画の一覧とレビューを表示する Astro 製の静的サイトです。Netlify でビルド・公開しています。
+
+## セットアップ
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+プロジェクト直下に `.env` を作り、次の環境変数を設定します。Netlify では同じ変数をサイトの環境変数に登録します。
 
-## 🚀 Project Structure
+| 変数                  | 内容                                   |
+| :-------------------- | :------------------------------------- |
+| `AIRTABLE_API_KEY`    | Airtable のアクセストークン            |
+| `AIRTABLE_BASE_ID`    | 映画データのベース ID                  |
+| `AIRTABLE_TABLE_NAME` | 映画データのテーブル名                 |
+| `TMDB_API_TOKEN`      | TMDb の API 読み取りアクセストークン   |
 
-Inside of your Astro project, you'll see the following folders and files:
+どれかが欠けている場合、Netlify ではビルドが失敗します。手元では画像のダウンロードだけを飛ばして続行するため、画像が表示されません。
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## 画像の仕組み
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+`npm run dev` と `npm run build` は、最初に [scripts/download-images.mjs](scripts/download-images.mjs) を実行します。
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- 映画ごとに TMDb を「タイトル＋年 → slug＋年 → タイトルのみ」の順で検索し、横長の背景画像（なければポスター）を `public/images/movies/<slug>.jpg` に保存します。
+- 保存済みの画像は取り直しません。画像を入れ替えたいときは、そのファイルを消してから実行します。
+- `public/images/` は Git の管理外です。Netlify では毎回すべて取り直します。
+- TMDb で見つからなかった映画は、画像なしで表示されます。
 
-Any static assets, like images, can be placed in the `public/` directory.
+## コマンド
 
-## 🧞 Commands
+| コマンド          | 内容                                             |
+| :---------------- | :----------------------------------------------- |
+| `npm run dev`     | 画像を取得してから開発サーバーを起動（`localhost:4321`） |
+| `npm run build`   | 画像を取得してから `./dist/` にビルド            |
+| `npm run preview` | ビルド結果を手元で確認                           |
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+画像は [TMDB](https://www.themoviedb.org/) から提供されています。This product uses the TMDB API but is not endorsed or certified by TMDB.
