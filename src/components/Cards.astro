@@ -7,16 +7,89 @@ interface Props {
 }
 
 const { movies } = Astro.props;
+
+const tagCounts = new Map<string, number>();
+for (const t of movies.flatMap((m) => m.tags ?? [])) {
+  tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+}
+const tags = [...tagCounts].sort((a, b) => b[1] - a[1]);
+const chip =
+  "border border-blue-300 rounded-full px-3 py-1 text-blue-900 bg-white aria-pressed:bg-blue-500 aria-pressed:text-white aria-pressed:border-blue-500";
 ---
 
 <div class="container pt-6 overflow-hidden">
-  <div class="flex flex-wrap -mx-3 xl:-mx-6">
+  <div id="movie-tags" class="flex flex-wrap gap-2 mb-4" role="group" aria-label="タグで絞り込み">
+    <button type="button" class={chip} data-tag="" aria-pressed="true">すべて ({movies.length})</button>
     {
-      movies.map((movie) => (
-        <div class="w-full sm:w-1/2 xl:w-1/3 px-3 xl:px-6 py-6">
+      tags.map(([tag, count]) => (
+        <button type="button" class={chip} data-tag={tag} aria-pressed="false">
+          {tag} ({count})
+        </button>
+      ))
+    }
+  </div>
+  <div class="flex justify-end">
+    <label class="text-blue-900 font-medium">
+      並び替え
+      <select id="movie-sort" class="ml-2 border border-blue-300 rounded-md bg-white px-2 py-1">
+        <option value="index:asc">標準</option>
+        <option value="year:desc">公開年（新しい順）</option>
+        <option value="year:asc">公開年（古い順）</option>
+        <option value="rating:desc">評価（高い順）</option>
+        <option value="rating:asc">評価（低い順）</option>
+        <option value="title:asc">名前（昇順）</option>
+        <option value="title:desc">名前（降順）</option>
+      </select>
+    </label>
+  </div>
+  <div id="movie-list" class="flex flex-wrap -mx-3 xl:-mx-6">
+    {
+      movies.map((movie, i) => (
+        <div
+          class="w-full sm:w-1/2 xl:w-1/3 px-3 xl:px-6 py-6"
+          data-index={i}
+          data-year={movie.year}
+          data-rating={movie.rating}
+          data-title={movie.title}
+          data-tags={JSON.stringify(movie.tags ?? [])}
+        >
           <Card movie={movie} />
         </div>
       ))
     }
   </div>
 </div>
+
+<script>
+  // ClientRouter で画面遷移しても動くよう、ページ表示のたびに紐付け直す
+  document.addEventListener("astro:page-load", () => {
+    const select = document.querySelector<HTMLSelectElement>("#movie-sort");
+    const list = document.querySelector<HTMLElement>("#movie-list");
+    if (!select || !list) return;
+
+    select.addEventListener("change", () => {
+      const [key, dir] = select.value.split(":");
+      const sign = dir === "desc" ? -1 : 1;
+      const items = [...list.children] as HTMLElement[];
+      items.sort((a, b) => {
+        const x = a.dataset[key] ?? "";
+        const y = b.dataset[key] ?? "";
+        // shortcut: 名前は文字コード寄りの順で、漢字は読み順にならない。読み順が要るなら Airtable に読みがな列を足す
+        const diff = key === "title" ? x.localeCompare(y, "ja") : Number(x) - Number(y);
+        return diff * sign || Number(a.dataset.index) - Number(b.dataset.index);
+      });
+      list.append(...items);
+    });
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>("#movie-tags button");
+    buttons.forEach((button) =>
+      button.addEventListener("click", () => {
+        const tag = button.dataset.tag ?? "";
+        buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+        for (const item of list.children as HTMLCollectionOf<HTMLElement>) {
+          item.hidden = tag !== "" && !JSON.parse(item.dataset.tags ?? "[]").includes(tag);
+        }
+      }),
+    );
+  });
+</script>
